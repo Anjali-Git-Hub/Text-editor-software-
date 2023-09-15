@@ -126,6 +126,22 @@ text_editor.pack(fill=tk.BOTH,expand=True)
 scroll_bar.config(command=text_editor.yview)
 text_editor.config(yscrollcommand=scroll_bar.set)
 
+# adding functionality of size and font box
+text_editor.configure(font=('Calibri',19))
+current_font_family='Calibri'
+current_font_size=19
+
+def change_font_family(event=None):
+    global current_font_family
+    current_font_family=fontfamily.get()
+    text_editor.configure(font=(current_font_family,current_font_size))
+def change_font_size(event=None):
+    global current_font_size
+    current_font_size=size_val.get()
+    text_editor.configure(font=(current_font_family,current_font_size))
+
+font_box.bind("<<ComboboxSelected>>",change_font_family)
+size_box.bind("<<ComboboxSelected>>",change_font_size)
 # -------------------------------------- Text editor eding ----------------------------
 
 ############################### Status Bar ######################################
