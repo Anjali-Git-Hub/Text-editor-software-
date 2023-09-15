@@ -11,14 +11,23 @@ main_app.title("Word Editor")
 
 ########################################### Menu ###########################################
 main_menu=tk.Menu()
-# icons 
+
+# file dropdown menu icons 
 new_icon=tk.PhotoImage(file='icon/new.png')
-status_icon=tk.PhotoImage(file='icon/status_bar.png')
+open_icon=tk.PhotoImage(file='icon/open.png')
 saveas_icon=tk.PhotoImage(file='icon/save_as.png')
-paste_icon=tk.PhotoImage(file='icon/paste.png')
+exit_icon=tk.PhotoImage(file='icon/exit.png')
 save_icon=tk.PhotoImage(file='icon/save.png')
 
 file=tk.Menu(main_menu,tearoff=False)
+file.add_command(label='New',image=new_icon,compound=tk.LEFT,accelerator='Ctrl+N')
+file.add_command(label='Open',image=open_icon,compound=tk.LEFT,accelerator='Ctrl+O')
+file.add_command(label='Save',image=save_icon,compound=tk.LEFT,accelerator='Ctrl+S')
+file.add_command(label='Save As',image=saveas_icon,compound=tk.LEFT,accelerator='Ctrl+Alt+S')
+file.add_command(label='Exit',image=exit_icon,compound=tk.LEFT,accelerator='Ctrl+Q')
+
+
+
 edit=tk.Menu(main_menu,tearoff=False)
 view=tk.Menu(main_menu,tearoff=False)
 color=tk.Menu(main_menu,tearoff=False)
