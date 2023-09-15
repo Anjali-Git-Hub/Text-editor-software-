@@ -76,6 +76,18 @@ main_app.config(menu=main_menu)
 
 
 ############################################### Tool bar ################################
+
+toolbar=ttk.Label(main_app)
+toolbar.pack(side=tk.TOP,fill=tk.X)
+
+# Adding font box
+font_tuple=tk.font.families()
+fontfamily=tk.StringVar()
+font_box=ttk.Combobox(toolbar,textvariable=fontfamily,width=30,state='readonly')
+font_box['values']=font_tuple
+font_box.grid(row=0,column=0,padx=5)
+font_box.current(font_tuple.index('Calibri'))
+
 # ---------------------------------------- Toolbar Ending -------------------------------
 
 
