@@ -82,17 +82,18 @@ size_box.grid(row=0,column=1,padx=5)
 size_box.current(4)
 
 # Bold , italics and underline button 
-bold_btn=tk.PhotoImage(file='icon/bold.png')
-bold=ttk.Button(toolbar,image=bold_btn)
-bold.grid(column=2,row=0,padx=5)
+bold_icon=tk.PhotoImage(file='icon/bold.png')
+bold_btn=ttk.Button(toolbar,image=bold_icon)
+bold_btn.grid(column=2,row=0,padx=5)
 
-italics_btn=tk.PhotoImage(file='icon/italic.png')
-italic=ttk.Button(toolbar,image=italics_btn)
-italic.grid(column=3,row=0,padx=5)
 
-underline_btn=tk.PhotoImage(file='icon/underline.png')
-underline=ttk.Button(toolbar,image=underline_btn)
-underline.grid(column=4,row=0,padx=5)
+italic_icon=tk.PhotoImage(file='icon/italic.png')
+italic_btn=ttk.Button(toolbar,image=italic_icon)
+italic_btn.grid(column=3,row=0,padx=5)
+
+underline_icon=tk.PhotoImage(file='icon/underline.png')
+underline_btn=ttk.Button(toolbar,image=underline_icon)
+underline_btn.grid(column=4,row=0,padx=5)
 
 
 # color theme button
@@ -142,6 +143,37 @@ def change_font_size(event=None):
 
 font_box.bind("<<ComboboxSelected>>",change_font_family)
 size_box.bind("<<ComboboxSelected>>",change_font_size)
+
+# adding functionality of bold btn 
+print(tk.font.Font(font=text_editor['font']).actual())
+def bold_functionality():
+    text_prop=tk.font.Font(font=text_editor['font'])
+    if text_prop.actual()['weight']=='normal':
+        text_editor.configure(font=(current_font_family,current_font_size,'bold'))
+    if text_prop.actual()['weight']=='bold':
+        text_editor.configure(font=(current_font_family,current_font_size,'normal'))
+bold_btn.configure(command=bold_functionality)
+
+# adding functionality of italics btn 
+def italics_functionality():
+    text_prop=tk.font.Font(font=text_editor['font'])
+    if text_prop.actual()['slant']=='roman':
+        text_editor.configure(font=(current_font_family,current_font_size,'italic'))
+    if text_prop.actual()['slant']=='italic':
+        text_editor.configure(font=(current_font_family,current_font_size,'roman'))
+italic_btn.configure(command=italics_functionality)
+
+# adding functionality of Underline btn 
+def underline_functionality():
+    text_prop=tk.font.Font(font=text_editor['font'])
+    if text_prop.actual()['underline']==0:
+        text_editor.configure(font=(current_font_family,current_font_size,'underline'))
+    if text_prop.actual()['underline']==1:
+        text_editor.configure(font=(current_font_family,current_font_size,'normal'))
+underline_btn.configure(command=underline_functionality)
+
+
+
 # -------------------------------------- Text editor eding ----------------------------
 
 ############################### Status Bar ######################################
