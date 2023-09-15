@@ -58,22 +58,8 @@ main_menu.add_cascade(label='Edit', menu=edit)
 main_menu.add_cascade(label='View', menu=view)
 main_menu.add_cascade(label='Color Theme', menu=color)
 
-
-
-
-
-
-
-
-
-
-
-
 main_app.config(menu=main_menu)
 # -------------------------------------------Menu Ending-------------------------------------
-
-
-
 
 ############################################### Tool bar ################################
 
@@ -88,15 +74,50 @@ font_box['values']=font_tuple
 font_box.grid(row=0,column=0,padx=5)
 font_box.current(font_tuple.index('Calibri'))
 
+# adding size box
+size_val=tk.IntVar()
+size_box=ttk.Combobox(toolbar,textvariable=size_val,width=15,state='readonly')
+size_box['values']=tuple(range(11,72,2))
+size_box.grid(row=0,column=1,padx=5)
+size_box.current(4)
+
+# Bold , italics and underline button 
+bold_btn=tk.PhotoImage(file='icon/bold.png')
+bold=ttk.Button(toolbar,image=bold_btn)
+bold.grid(column=2,row=0,padx=5)
+
+italics_btn=tk.PhotoImage(file='icon/italic.png')
+italic=ttk.Button(toolbar,image=italics_btn)
+italic.grid(column=3,row=0,padx=5)
+
+underline_btn=tk.PhotoImage(file='icon/underline.png')
+underline=ttk.Button(toolbar,image=underline_btn)
+underline.grid(column=4,row=0,padx=5)
+
+
+# color theme button
+color_icon=tk.PhotoImage(file='icon/font_color.png')
+color_btn=ttk.Button(toolbar,image=color_icon)
+color_btn.grid(column=5,row=0,padx=5)
+
+
+# alignleft,alignright,aligncenter button
+alignl_icon=tk.PhotoImage(file='icon/align_left.png')
+alignl_btn=ttk.Button(toolbar,image=alignl_icon)
+alignl_btn.grid(column=6,row=0,padx=5)
+
+alignc_icon=tk.PhotoImage(file='icon/align_center.png')
+alignc_btn=ttk.Button(toolbar,image=alignc_icon)
+alignc_btn.grid(row=0,column=7,padx=5)
+
+alignr_icon=tk.PhotoImage(file='icon/align_right.png')
+alignr_btn=ttk.Button(toolbar,image=alignr_icon)
+alignr_btn.grid(row=0,column=8,padx=5)
+
 # ---------------------------------------- Toolbar Ending -------------------------------
 
-
-
-
-
-
-
 ######################################### Text editor ###############################
+
 # -------------------------------------- Text editor eding ----------------------------
 
 ########################### Main menu functionality #######################
