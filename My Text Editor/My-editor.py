@@ -11,6 +11,13 @@ main_app.title("Word Editor")
 
 ########################################### Menu ###########################################
 main_menu=tk.Menu()
+# icons 
+new_icon=tk.PhotoImage(file='icon/new.png')
+status_icon=tk.PhotoImage(file='icon/status_bar.png')
+saveas_icon=tk.PhotoImage(file='icon/save_as.png')
+paste_icon=tk.PhotoImage(file='icon/paste.png')
+save_icon=tk.PhotoImage(file='icon/save.png')
+
 file=tk.Menu(main_menu,tearoff=False)
 edit=tk.Menu(main_menu,tearoff=False)
 view=tk.Menu(main_menu,tearoff=False)
