@@ -116,9 +116,27 @@ alignr_btn.grid(row=0,column=8,padx=5)
 
 # ---------------------------------------- Toolbar Ending -------------------------------
 
-######################################### Text editor ###############################
+##################################### Text editor ######################################
+text_editor=tk.Text(main_app)
+text_editor.config(wrap='word',relief=tk.FLAT)
+scroll_bar=tk.Scrollbar(main_app)
+text_editor.focus_set()
+scroll_bar.pack(side=tk.RIGHT,fill=tk.Y)
+text_editor.pack(fill=tk.BOTH,expand=True)
+scroll_bar.config(command=text_editor.yview)
+text_editor.config(yscrollcommand=scroll_bar.set)
 
 # -------------------------------------- Text editor eding ----------------------------
+
+############################### Status Bar ######################################
+
+status_bar=ttk.Label(main_app,text='Status Bar')
+status_bar.pack(side=tk.BOTTOM)
+
+
+
+
+# ----------------------------------- statusbar end --------------------------------
 
 ########################### Main menu functionality #######################
 
