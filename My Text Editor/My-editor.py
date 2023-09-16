@@ -172,6 +172,35 @@ def underline_functionality():
         text_editor.configure(font=(current_font_family,current_font_size,'normal'))
 underline_btn.configure(command=underline_functionality)
 
+# adding functionality of color theme
+def color_chooser():
+    color_val= tk.colorchooser.askcolor()
+    text_editor.configure(fg=color_val[1])
+
+color_btn.configure(command=color_chooser)
+
+# adding functionality of align items
+def align_left():
+    textcontent=text_editor.get(1.0,'end')
+    text_editor.tag_config('left',justify=tk.LEFT)
+    text_editor.delete(1.0,tk.END)
+    text_editor.insert(tk.INSERT,textcontent,'left')
+def align_center():
+    textcontent=text_editor.get(1.0,'end')
+    text_editor.tag_config('center',justify=tk.CENTER)
+    text_editor.delete(1.0,tk.END)
+    text_editor.insert(tk.INSERT,textcontent,'center')
+def align_right():
+    textcontent=text_editor.get(1.0,'end')
+    text_editor.tag_config('right',justify=tk.RIGHT)
+    text_editor.delete(1.0,tk.END)
+    text_editor.insert(tk.INSERT,textcontent,'right')
+
+
+# adding commands to the btns
+alignl_btn.configure(command=align_left)
+alignr_btn.configure(command=align_right)
+alignc_btn.configure(command=align_center)
 
 
 # -------------------------------------- Text editor eding ----------------------------
