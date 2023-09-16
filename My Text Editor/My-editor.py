@@ -117,101 +117,129 @@ alignr_btn.grid(row=0,column=8,padx=5)
 
 # ---------------------------------------- Toolbar Ending -------------------------------
 
-##################################### Text editor ######################################
-text_editor=tk.Text(main_app)
-text_editor.config(wrap='word',relief=tk.FLAT)
-scroll_bar=tk.Scrollbar(main_app)
+
+################################# Text Editor ###############################################
+text_editor = tk.Text(main_app)
+text_editor.config(wrap='word', relief=tk.FLAT)
+
+scroll_bar = tk.Scrollbar(main_app)
 text_editor.focus_set()
-scroll_bar.pack(side=tk.RIGHT,fill=tk.Y)
-text_editor.pack(fill=tk.BOTH,expand=True)
+scroll_bar.pack(side=tk.RIGHT, fill=tk.Y)
+text_editor.pack(fill=tk.BOTH, expand=True)
 scroll_bar.config(command=text_editor.yview)
 text_editor.config(yscrollcommand=scroll_bar.set)
 
-# adding functionality of size and font box
-text_editor.configure(font=('Calibri',19))
-current_font_family='Calibri'
-current_font_size=19
+# font family and font size functionality 
+current_font_family = 'Calibri'
+current_font_size = 19
 
-def change_font_family(event=None):
+def change_font(event=None):
     global current_font_family
-    current_font_family=fontfamily.get()
-    text_editor.configure(font=(current_font_family,current_font_size))
-def change_font_size(event=None):
+    current_font_family = fontfamily.get()
+    text_editor.configure(font=(current_font_family, current_font_size))
+
+def change_fontsize(event=None):
     global current_font_size
-    current_font_size=size_val.get()
-    text_editor.configure(font=(current_font_family,current_font_size))
+    current_font_size = size_val.get()
+    text_editor.configure(font=(current_font_family, current_font_size))
 
-font_box.bind("<<ComboboxSelected>>",change_font_family)
-size_box.bind("<<ComboboxSelected>>",change_font_size)
 
-# adding functionality of bold btn 
-print(tk.font.Font(font=text_editor['font']).actual())
-def bold_functionality():
-    text_prop=tk.font.Font(font=text_editor['font'])
-    if text_prop.actual()['weight']=='normal':
-        text_editor.configure(font=(current_font_family,current_font_size,'bold'))
-    if text_prop.actual()['weight']=='bold':
-        text_editor.configure(font=(current_font_family,current_font_size,'normal'))
-bold_btn.configure(command=bold_functionality)
+font_box.bind("<<ComboboxSelected>>", change_font)
+size_box.bind("<<ComboboxSelected>>", change_fontsize)
 
-# adding functionality of italics btn 
-def italics_functionality():
-    text_prop=tk.font.Font(font=text_editor['font'])
-    if text_prop.actual()['slant']=='roman':
-        text_editor.configure(font=(current_font_family,current_font_size,'italic'))
-    if text_prop.actual()['slant']=='italic':
-        text_editor.configure(font=(current_font_family,current_font_size,'roman'))
-italic_btn.configure(command=italics_functionality)
+######## buttons functionality 
 
-# adding functionality of Underline btn 
-def underline_functionality():
-    text_prop=tk.font.Font(font=text_editor['font'])
-    if text_prop.actual()['underline']==0:
-        text_editor.configure(font=(current_font_family,current_font_size,'underline'))
-    if text_prop.actual()['underline']==1:
-        text_editor.configure(font=(current_font_family,current_font_size,'normal'))
-underline_btn.configure(command=underline_functionality)
+# bold button functionality
+def change_bold():
+    text_property = tk.font.Font(font=text_editor['font'])
+    if text_property.actual()['weight'] == 'normal':
+        text_editor.configure(font=(current_font_family, current_font_size, 'bold'))
+    if text_property.actual()['weight'] == 'bold':
+        text_editor.configure(font=(current_font_family, current_font_size, 'normal'))
+    
+bold_btn.configure(command=change_bold)
 
-# adding functionality of color theme
-def color_chooser():
-    color_val= tk.colorchooser.askcolor()
-    text_editor.configure(fg=color_val[1])
 
-color_btn.configure(command=color_chooser)
+# italic functionlaity
+def change_italic():
+    text_property = tk.font.Font(font=text_editor['font'])
+    if text_property.actual()['slant'] == 'roman':
+        text_editor.configure(font=(current_font_family, current_font_size, 'italic'))
+    if text_property.actual()['slant'] == 'italic':
+        text_editor.configure(font=(current_font_family, current_font_size, 'normal'))
+    
+italic_btn.configure(command=change_italic)
 
-# adding functionality of align items
+# underline functionality 
+def change_underline():
+    text_property = tk.font.Font(font=text_editor['font'])
+    if text_property.actual()['underline'] == 0:
+        text_editor.configure(font=(current_font_family, current_font_size, 'underline'))
+    if text_property.actual()['underline'] == 1:
+        text_editor.configure(font=(current_font_family, current_font_size, 'normal'))
+    
+underline_btn.configure(command=change_underline)
+
+
+## font color functionality 
+def change_font_color():
+    color_var = tk.colorchooser.askcolor()
+    text_editor.configure(fg=color_var[1])
+
+
+color_btn.configure(command=change_font_color)
+
+### align functionality 
+
 def align_left():
-    textcontent=text_editor.get(1.0,'end')
-    text_editor.tag_config('left',justify=tk.LEFT)
-    text_editor.delete(1.0,tk.END)
-    text_editor.insert(tk.INSERT,textcontent,'left')
-def align_center():
-    textcontent=text_editor.get(1.0,'end')
-    text_editor.tag_config('center',justify=tk.CENTER)
-    text_editor.delete(1.0,tk.END)
-    text_editor.insert(tk.INSERT,textcontent,'center')
-def align_right():
-    textcontent=text_editor.get(1.0,'end')
-    text_editor.tag_config('right',justify=tk.RIGHT)
-    text_editor.delete(1.0,tk.END)
-    text_editor.insert(tk.INSERT,textcontent,'right')
+    text_content = text_editor.get(1.0, 'end')
+    text_editor.tag_config('left', justify=tk.LEFT)
+    text_editor.delete(1.0, tk.END)
+    text_editor.insert(tk.INSERT, text_content, 'left')
 
-
-# adding commands to the btns
 alignl_btn.configure(command=align_left)
-alignr_btn.configure(command=align_right)
+
+## center 
+def align_center():
+    text_content = text_editor.get(1.0, 'end')
+    text_editor.tag_config('center', justify=tk.CENTER)
+    text_editor.delete(1.0, tk.END)
+    text_editor.insert(tk.INSERT, text_content, 'center')
+
 alignc_btn.configure(command=align_center)
 
+## right 
+def align_right():
+    text_content = text_editor.get(1.0, 'end')
+    text_editor.tag_config('right', justify=tk.RIGHT)
+    text_editor.delete(1.0, tk.END)
+    text_editor.insert(tk.INSERT, text_content, 'right')
 
-# -------------------------------------- Text editor eding ----------------------------
+alignr_btn.configure(command=align_right)
+
+
+# ----------------------------------------- Text-editor ending -------------------------------
+
 
 ############################### Status Bar ######################################
+
 
 status_bar=ttk.Label(main_app,text='Status Bar')
 status_bar.pack(side=tk.BOTTOM)
 
+# adding functionality of status bar
 
+text_changed = False 
+def statusbar_func(event=None):
+    global text_changed
+    if text_editor.edit_modified():
+        text_changed = True 
+        words = len(text_editor.get(1.0, 'end-1c').split())
+        characters = len(text_editor.get(1.0, 'end-1c'))
+        status_bar.config(text=f'{words}:Words    {characters}:Characters')
+    text_editor.edit_modified(False)
 
+text_editor.bind('<<Modified>>', statusbar_func)
 
 # ----------------------------------- statusbar end --------------------------------
 
