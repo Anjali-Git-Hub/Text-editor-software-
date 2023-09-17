@@ -245,19 +245,144 @@ text_editor.bind('<<Modified>>', statusbar_func)
 
 ########################### Main menu functionality #######################
 
-# file commands
-file.add_command(label='New',image=new_icon,compound=tk.LEFT,accelerator='Ctrl+N')
-file.add_command(label='Open',image=open_icon,compound=tk.LEFT,accelerator='Ctrl+O')
-file.add_command(label='Save',image=save_icon,compound=tk.LEFT,accelerator='Ctrl+S')
-file.add_command(label='Save As',image=saveas_icon,compound=tk.LEFT,accelerator='Ctrl+Alt+S')
-file.add_command(label='Exit',image=exit_icon,compound=tk.LEFT,accelerator='Ctrl+Q')
+# New file functionality
+url=''
+def new_func(event=None):
+    global url
+    url=''
+    text_editor.delete(1.0,tk.END)
 
+# open file  functionality
+def openfile_func(event=None):
+    global url
+    url=filedialog.askopenfilename(initialdir=os.getcwd(),title='Select File',filetypes=(('Text File','*.txt'),('All Files','*.*')))
+    try:
+        with open(url,'r') as fr:
+            text_editor.delete(1.0,tk.END)
+            text_editor.insert(1.0,fr.read())
+    except FileNotFoundError:
+        return
+    except:
+        return
+    main_app.title(os.path.basename(url))
+
+# Save file  functionality
+def save_func(event=None):
+    global url
+    try:
+        if url:
+            content=str(text_editor.get(1.0,tk.END))
+            with open(url,'w',encoding='utf-8') as fw:
+                fw.write(content)
+        else:
+            url=filedialog.asksaveasfile(mode='w',defaultextension='.txt',filetypes=(('Text File','*.txt'),('All Files','*.*')))
+            content1=text_editor.get(1.0,tk.END)
+            url.write(content1)
+            url.close()
+    except:
+        return
+
+# Save As file functionality
+def saveas_func(event=None):
+    global url
+    try:
+        url=filedialog.asksaveasfile(mode='w',defaultextension='.txt',filetypes=(('Text File','*.txt'),('All Files','*.*')))
+        content=text_editor.get(1.0,tk.END)
+        url.write(content)
+        url.close()
+    except:
+        return
+
+def exit_func(event:None):
+    global url,text_changed
+    try:
+        if text_changed:
+            message=messagebox.askyesnocancel('warning','Do you want to save this file?')
+            if message is True:
+                if url:
+                    content=text_editor.get(1.0,tk.END)
+                    with open(url,'w',encoding='utf-8') as fw:
+                        fw.write(content)
+                        main_app.destroy()
+                else:
+                    url=filedialog.asksaveasfile(mode='w',defaultextension='.txt',filetypes=(('Text File','*.txt'),('All Files','*.*')))
+                    content1=text_editor.get(1.0,tk.END)
+                    url.write(content1)
+                    url.close()
+            elif message is False:
+                main_app.destroy()
+        else:
+            main_app.destroy()
+    except:
+        return
+
+# file commands
+file.add_command(label='New',image=new_icon,compound=tk.LEFT,accelerator='Ctrl+N',command=new_func)
+file.add_command(label='Open',image=open_icon,compound=tk.LEFT,accelerator='Ctrl+O',command=openfile_func)
+file.add_command(label='Save',image=save_icon,compound=tk.LEFT,accelerator='Ctrl+S',command=save_func)
+file.add_command(label='Save As',image=saveas_icon,compound=tk.LEFT,accelerator='Ctrl+Alt+S',command=saveas_func)
+file.add_command(label='Exit',image=exit_icon,compound=tk.LEFT,accelerator='Ctrl+Q',command=exit_func)
+
+
+
+# find dialogue box
+def find_func():
+    def find():
+        word=find_input.get()
+        text_editor.tag_remove('match',1.0,tk.END)
+        match=0
+        if word:
+            start_pos='1.0'
+            while True:
+                start_pos=text_editor.search(word,start_pos,stopindex=tk.END)
+                if not start_pos:
+                    break
+                end_pos=f'{start_pos}+{len(word)}c'
+                text_editor.tag_add('match',start_pos,end_pos)
+                match+=1
+                start_pos=end_pos
+                text_editor.tag_config('match',foreground='red',background='yellow')
+    def replace():
+        word=find_input.get()
+        replace_word=replace_input.get()
+        content=text_editor.get(1.0,tk.END)
+        new_content=content.replace(word,replace_word)
+        text_editor.delete(1.0,tk.END)
+        text_editor.insert(1.0,new_content)
+
+ # Creating find dialogue  
+    find_dialogue=tk.Toplevel()
+    find_dialogue.geometry('450x250+500+200')
+    find_dialogue.title('Find & Replace')
+    find_dialogue.resizable(0,0)
+
+    find_frame=ttk.Labelframe(find_dialogue,text='Find & Replace')
+    find_frame.pack(pady=40)
+
+    # find and replace labels and inputs
+    find_label=ttk.Label(find_frame,text='Find')
+    find_label.grid(row=0,column=0,padx=5,pady=5)
+    find_input=ttk.Entry(find_frame,width=30)
+    find_input.grid(row=0,column=1,padx=5,pady=5)
+    replace_label=ttk.Label(find_frame,text='Replace')
+    replace_label.grid(row=1,column=0,padx=5,pady=5)
+    replace_input=ttk.Entry(find_frame,width=30)
+    replace_input.grid(row=1,column=1,padx=5,pady=5)
+
+    # find and replace btns
+    find_btn=ttk.Button(find_frame,text='Find',command=find)
+    find_btn.grid(row=2,column=0,padx=8,pady=10)
+    replace_btn=ttk.Button(find_frame,text='Replace',command=replace)
+    replace_btn.grid(row=2,column=1,padx=8,pady=10)
+
+    find_dialogue.mainloop()
 # edit commands
-edit.add_command(label='Copy',image=copy_icon,compound=tk.LEFT,accelerator='Ctrl+C')
-edit.add_command(label='Paste',image=paste_icon,compound=tk.LEFT,accelerator='Ctrl+V')
-edit.add_command(label='Cut',image=cut_icon,compound=tk.LEFT,accelerator='Ctrl+X')
-edit.add_command(label='Clear All',image=clearall_icon,compound=tk.LEFT,accelerator='Ctrl+Alt+C')
-edit.add_command(label='Find',image=find_icon,compound=tk.LEFT,accelerator='Ctrl+F')
+edit.add_command(label='Copy',image=copy_icon,compound=tk.LEFT,accelerator='Ctrl+C' ,command=lambda:text_editor.event_generate("<control C>"))
+edit.add_command(label='Paste',image=paste_icon,compound=tk.LEFT,accelerator='Ctrl+V' ,command=lambda:text_editor.event_generate("<control V>"))
+edit.add_command(label='Cut',image=cut_icon,compound=tk.LEFT,accelerator='Ctrl+X', command=lambda:text_editor.event_generate("<control X>"))
+edit.add_command(label='Clear All',image=clearall_icon,compound=tk.LEFT,accelerator='Ctrl+Alt+C', command=lambda:text_editor.delete(1.0,tk.END))
+edit.add_command(label='Find',image=find_icon,compound=tk.LEFT,accelerator='Ctrl+F',command=find_func)
+
 
 # view commands
 view.add_checkbutton(label="Tool Bar",image=toolbar_icon,compound=tk.LEFT)
