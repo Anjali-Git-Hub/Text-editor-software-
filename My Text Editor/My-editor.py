@@ -226,9 +226,10 @@ alignr_btn.configure(command=align_right)
 
 ############################### Status Bar ######################################
 
+status_bar = ttk.Label(text_editor,text='Status Bar',anchor='center')
+status_bar.pack(side=tk.BOTTOM,fill=tk.X)
 
-status_bar=ttk.Label(main_app,text='Status Bar')
-status_bar.pack(side=tk.BOTTOM)
+
 
 # adding functionality of status bar
 
@@ -405,9 +406,38 @@ edit.add_command(label='Cut',image=cut_icon,compound=tk.LEFT,accelerator='Ctrl+X
 edit.add_command(label='Clear All',image=clearall_icon,compound=tk.LEFT,accelerator='Ctrl+Alt+C', command=lambda:text_editor.delete(1.0,tk.END))
 edit.add_command(label='Find',image=find_icon,compound=tk.LEFT,accelerator='Ctrl+F',command=find_func)
 
-# view commands
-view.add_checkbutton(label="Tool Bar",image=toolbar_icon,compound=tk.LEFT)
-view.add_checkbutton(label="Status Bar",image=statusbar_icon,compound=tk.LEFT)
+# view functionality
+show_statusbar = tk.BooleanVar()
+show_statusbar.set(True)
+show_toolbar = tk.BooleanVar()
+show_toolbar.set(True)
+
+def hide_toolbar():
+    global show_toolbar
+    if show_toolbar:
+        toolbar.pack_forget()
+        show_toolbar = False 
+    else :
+        text_editor.pack_forget()
+        status_bar.pack_forget()
+        toolbar.pack(side=tk.TOP, fill=tk.X)
+        text_editor.pack(fill=tk.BOTH, expand=True)
+        status_bar.pack(side=tk.BOTTOM)
+        show_toolbar = True 
+
+
+def hide_statusbar():
+    global show_statusbar
+    if show_statusbar:
+        status_bar.pack_forget()
+        show_statusbar = False 
+    else :
+        status_bar.pack(side=tk.BOTTOM)
+        show_statusbar = True 
+
+
+view.add_checkbutton(label='Tool Bar',onvalue=True, offvalue=0,variable = show_toolbar, image=toolbar_icon, compound=tk.LEFT, command=hide_toolbar)
+view.add_checkbutton(label='Status Bar',onvalue=1, offvalue=False,variable = show_statusbar, image=statusbar_icon, compound=tk.LEFT, command=hide_statusbar)
 
 # color theme commands 
 def change_theme():
