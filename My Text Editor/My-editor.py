@@ -1,12 +1,12 @@
 import tkinter as tk
 from tkinter import ttk
-from tkinter import font,colorchooser,filedialog,messagebox
+from tkinter import font, colorchooser, filedialog, messagebox
 import os
 
 main_app=tk.Tk()
 main_app.geometry('1200x800')
 main_app.title("Word Editor")
-
+# 800
 
 
 ########################################### Menu ###########################################
@@ -30,39 +30,43 @@ find_icon=tk.PhotoImage(file='icon/find.png')
 
 edit=tk.Menu(main_menu,tearoff=False)
 
-
-
 # View dropdown menu icons 
 toolbar_icon=tk.PhotoImage(file='icon/tool_bar.png')
 statusbar_icon=tk.PhotoImage(file='icon/status_bar.png')
 
 view=tk.Menu(main_menu,tearoff=False)
 
-
-
 # color theme dropdown menu icons
-light_icon=tk.PhotoImage(file='icon/light_default.png')
-lightplus_icon=tk.PhotoImage(file='icon/light_plus.png')
-dark_icon=tk.PhotoImage(file='icon/dark.png')
-red_icon=tk.PhotoImage(file='icon/red.png')
-blue_icon=tk.PhotoImage(file='icon/night_blue.png')
-color=tk.Menu(main_menu,tearoff=False)
+light_default_icon = tk.PhotoImage(file='icon/light_default.png')
+light_plus_icon = tk.PhotoImage(file='icon/light_plus.png')
+dark_icon = tk.PhotoImage(file='icon/dark.png')
+red_icon = tk.PhotoImage(file='icon/red.png')
+monokai_icon = tk.PhotoImage(file='icon/monokai.png')
+night_blue_icon = tk.PhotoImage(file='icon/night_blue.png')
+color_theme = tk.Menu(main_menu, tearoff=False)
 
+theme_choice = tk.StringVar()
+color_icons = (light_default_icon, light_plus_icon, dark_icon, red_icon, monokai_icon, night_blue_icon)
 
-
-
+color_dict = {
+    'Light Default ' : ('#000000', '#ffffff'),
+    'Light Plus' : ('#474747', '#e0e0e0'),
+    'Dark' : ('#c4c4c4', '#2d2d2d'),
+    'Red' : ('#2d2d2d', '#ffe8e8'),
+    'Monokai' : ('#d3b774', '#474747'),
+    'Night Blue' :('#ededed', '#6b9dc2')
+}
 
 # add cascade
 main_menu.add_cascade(label='File', menu=file)
 main_menu.add_cascade(label='Edit', menu=edit)
 main_menu.add_cascade(label='View', menu=view)
-main_menu.add_cascade(label='Color Theme', menu=color)
+main_menu.add_cascade(label='Color Theme', menu=color_theme)
 
 main_app.config(menu=main_menu)
 # -------------------------------------------Menu Ending-------------------------------------
 
 ############################################### Tool bar ################################
-
 toolbar=ttk.Label(main_app)
 toolbar.pack(side=tk.TOP,fill=tk.X)
 
@@ -77,7 +81,7 @@ font_box.current(font_tuple.index('Calibri'))
 # adding size box
 size_val=tk.IntVar()
 size_box=ttk.Combobox(toolbar,textvariable=size_val,width=15,state='readonly')
-size_box['values']=tuple(range(11,72,2))
+size_box['values']=tuple(range(11,73,2))
 size_box.grid(row=0,column=1,padx=5)
 size_box.current(4)
 
@@ -116,7 +120,6 @@ alignr_btn=ttk.Button(toolbar,image=alignr_icon)
 alignr_btn.grid(row=0,column=8,padx=5)
 
 # ---------------------------------------- Toolbar Ending -------------------------------
-
 
 ################################# Text Editor ###############################################
 text_editor = tk.Text(main_app)
@@ -243,8 +246,8 @@ text_editor.bind('<<Modified>>', statusbar_func)
 
 # ----------------------------------- statusbar end --------------------------------
 
-########################### Main menu functionality #######################
 
+########################### Main menu functionality #######################
 # New file functionality
 url=''
 def new_func(event=None):
@@ -316,6 +319,17 @@ def exit_func(event:None):
     except:
         return
 
+
+#binding shortcut keys with their respective functions 
+main_app.bind("<Control-n>", new_func)
+main_app.bind("<Control-o>", openfile_func)
+main_app.bind("<Control-s>", save_func)
+main_app.bind("<Control-Alt-s>", saveas_func)
+main_app.bind("<Control-q>", exit_func)
+
+
+
+
 # file commands
 file.add_command(label='New',image=new_icon,compound=tk.LEFT,accelerator='Ctrl+N',command=new_func)
 file.add_command(label='Open',image=open_icon,compound=tk.LEFT,accelerator='Ctrl+O',command=openfile_func)
@@ -326,6 +340,7 @@ file.add_command(label='Exit',image=exit_icon,compound=tk.LEFT,accelerator='Ctrl
 
 
 # find dialogue box
+
 def find_func():
     def find():
         word=find_input.get()
@@ -376,6 +391,13 @@ def find_func():
     replace_btn.grid(row=2,column=1,padx=8,pady=10)
 
     find_dialogue.mainloop()
+
+
+#binding shortcut key with their respective functions 
+main_app.bind("<Control-f>", find_func)
+
+
+
 # edit commands
 edit.add_command(label='Copy',image=copy_icon,compound=tk.LEFT,accelerator='Ctrl+C' ,command=lambda:text_editor.event_generate("<control C>"))
 edit.add_command(label='Paste',image=paste_icon,compound=tk.LEFT,accelerator='Ctrl+V' ,command=lambda:text_editor.event_generate("<control V>"))
@@ -383,17 +405,20 @@ edit.add_command(label='Cut',image=cut_icon,compound=tk.LEFT,accelerator='Ctrl+X
 edit.add_command(label='Clear All',image=clearall_icon,compound=tk.LEFT,accelerator='Ctrl+Alt+C', command=lambda:text_editor.delete(1.0,tk.END))
 edit.add_command(label='Find',image=find_icon,compound=tk.LEFT,accelerator='Ctrl+F',command=find_func)
 
-
 # view commands
 view.add_checkbutton(label="Tool Bar",image=toolbar_icon,compound=tk.LEFT)
 view.add_checkbutton(label="Status Bar",image=statusbar_icon,compound=tk.LEFT)
 
 # color theme commands 
-color.add_radiobutton(label='Light(default)',image=light_icon,compound=tk.LEFT)
-color.add_radiobutton(label='Light+',image=lightplus_icon,compound=tk.LEFT)
-color.add_radiobutton(label='Dark',image=dark_icon,compound=tk.LEFT)
-color.add_radiobutton(label='Red',image=red_icon,compound=tk.LEFT)
-color.add_radiobutton(label='Blue',image=blue_icon,compound=tk.LEFT)
+def change_theme():
+    chosen_theme = theme_choice.get()
+    color_tuple = color_dict.get(chosen_theme)
+    fg_color, bg_color = color_tuple[0], color_tuple[1]
+    text_editor.config(background=bg_color, fg=fg_color) 
+count = 0 
+for i in color_dict:
+    color_theme.add_radiobutton(label = i, image=color_icons[count], variable=theme_choice, compound=tk.LEFT, command=change_theme)
+    count += 1 
 
 
 # -------------------------- ending-----------------------------------
